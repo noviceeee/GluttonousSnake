@@ -9,66 +9,67 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class Ground extends Frame {
-
-	public static final int GAME_HEIGHT = 400;// 游戏窗口大小
+public static final int GAME_HEIGHT = 400;// 游戏窗口大小
 	public static final int GAME_WIDTH = 500;
 	public static final int UNIT_SIZE = 25;// 单元格大小
-	public int score = 0;
-	private boolean play = true;
-	private boolean restart = false;
+	public int score = 0;//游戏得分
+	private boolean play = true;//控制游戏暂停/开始
+	private boolean restart = false;//控制游戏重新开始
+	
 	Snake snake = new Snake(50, 50, Direction.STOP, this);
-	Food food = new Food(this, snake);
+	Food food = new Food(snake);
 
-	public void paint(Graphics g) {
+	public void paint(Graphics g) {//显示游戏运行界面或结束界面
 		if (snake.live)
 			play(g);
 		else
 			gameOver(g);
 	}
 
-	private void play(Graphics g) {
+	private void play(Graphics g) {//游戏运行
 		Color c = g.getColor();
 		g.setColor(Color.darkGray);
-		for (int i = UNIT_SIZE; i < GAME_HEIGHT; i += UNIT_SIZE) {
+		
+		for (int i = UNIT_SIZE; i < GAME_HEIGHT; i += UNIT_SIZE) {//背景横线
 			g.drawLine(0, i, GAME_WIDTH, i);
 		}
-		for (int j = UNIT_SIZE; j < GAME_WIDTH; j += UNIT_SIZE) {
+		for (int j = UNIT_SIZE; j < GAME_WIDTH; j += UNIT_SIZE) {//背景竖线
 			g.drawLine(j, 0, j, GAME_HEIGHT);
 		}
-		g.setColor(Color.white);
+		
 
-		if (!food.exist)
-			food = new Food(this, snake);
+		if (!food.exist)//如果旧食物不存在就创建一个新的
+			food = new Food(snake);
 		food.draw(g);
 		snake.draw(g);
 
-		g.drawString("score:" + score, 10, 50);
+		g.setColor(Color.white);
+		g.drawString("score:" + score, 10, 50);//显示得分
 
 		g.setColor(c);
 	}
 
-	private void gameOver(Graphics g) {
+	private void gameOver(Graphics g) {//游戏结束
 		Color c = g.getColor();
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("宋体", Font.BOLD, 80));
 		g.drawString("GAME OVER", 50, 210);
 		g.setFont(new Font("宋体", Font.BOLD, 40));
-		g.drawString("your score: " + score, 110, 260);
+		g.drawString("your score: " + score, 105, 260);
 		g.setFont(new Font("宋体", Font.CENTER_BASELINE, 20));
-		g.drawString("press R to play again", 140, 380);
+		g.drawString("press R to play again", 135, 380);
 		g.setColor(c);
 	}
 
-	public void init() {
+	public void init() {//重新开始时初始化数据
 		score = 0;
 		play = true;
 		restart = false;
-		snake = new Snake(150, 50, Direction.STOP, this);
-		food = new Food(this, snake);
+		snake = new Snake(50, 50, Direction.STOP, this);
+		food = new Food(snake);
 	}
 
-	Image offScreenImage = null;
-
+	Image offScreenImage = null;//双缓冲解决屏幕刷新闪烁问题
 	public void update(Graphics g) {
 		if (offScreenImage == null) {
 			offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
@@ -82,20 +83,22 @@ public class Ground extends Frame {
 		g.drawImage(offScreenImage, 0, 0, null);
 	}
 
-	public void launch() {
+	public void launch() {//游戏启动
 		this.setLocation(400, 100);
 		this.setSize(GAME_WIDTH, GAME_HEIGHT);
 		this.setTitle("The Gluttonous Snake");
-		this.addWindowListener(new WindowAdapter() {
+		
+		this.addWindowListener(new WindowAdapter() {//设置窗口可关闭
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
-		this.setResizable(false);
+		
+		this.setResizable(false);//窗口不可改变大小
 		this.setBackground(Color.black);
 		this.addKeyListener(new KeyMonitor());
-		this.setVisible(true);
-		new Thread(new PaintThread()).start();
+		this.setVisible(true);//窗口可视
+		new Thread(new PaintThread()).start();//启动线程
 		;
 	}
 
@@ -128,13 +131,14 @@ public class Ground extends Frame {
 		public void keyReleased(KeyEvent e) {
 			snake.keyReleased(e);
 			int key = e.getKeyCode();
-			if (key == KeyEvent.VK_SPACE && snake.live) {
+			if (key == KeyEvent.VK_SPACE && snake.live) {//按空格键暂停/继续游戏
 				if (play)
 					play = false;
 				else
 					play = true;
 			}
-			if (key == KeyEvent.VK_R && !snake.live)
+			
+			if (key == KeyEvent.VK_R && !snake.live)//游戏结束后按R键重新开始
 				restart = true;
 		}
 	}
