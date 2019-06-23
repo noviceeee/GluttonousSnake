@@ -55,7 +55,7 @@ public static final int GAME_HEIGHT = 400;// 游戏窗口大小
 		g.setFont(new Font("宋体", Font.BOLD, 80));
 		g.drawString("GAME OVER", 50, 210);
 		g.setFont(new Font("宋体", Font.BOLD, 40));
-		g.drawString("your score: " + score, 105, 260);
+		g.drawString("your score: " + score, 90, 260);
 		g.setFont(new Font("宋体", Font.CENTER_BASELINE, 20));
 		g.drawString("press R to play again", 135, 380);
 		g.setColor(c);

@@ -5,10 +5,11 @@ import java.util.Random;
 public class Food {
 	private static Random r = new Random();
 	private static final int UNIT_SIZE = Ground.UNIT_SIZE;//食物大小和窗口单元格相同
+	int status = 1;//食物状态：1-最好  2-好 3-坏
 	static int x;
 	static int y;
 	private Snake snake;
-	private int time = 50;// 存在时间，超过后此食物会消失
+	 int time = 60;// 存在时间，超过后此食物会消失
 	boolean exist = true;//食物是否存在
 
 	public Food(Snake snake) {
@@ -35,7 +36,18 @@ public class Food {
 		if (time <= 0)//时间到了则食物消失
 			exist = false;
 		Color c = g.getColor();
+		if(time>40) {//不同时间食物状态不一样，即吃掉后得分不同
 		g.setColor(Color.red);
+		}
+		else if(time>10) {
+			g.setColor(Color.pink);
+			status=2;
+			}
+		else {
+			g.setColor(Color.gray);
+		status = 3;	
+		}
+			
 		g.fillRect(x, y, UNIT_SIZE, UNIT_SIZE);
 		g.setColor(c);
 		time--;// 每重画一次，食物的存在时间减少

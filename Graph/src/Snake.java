@@ -127,17 +127,37 @@ public class Snake {
 			checkLive();
 		}
 
-		private void eat() {//当蛇头与食物重合，判定为吃到食物
-			if (live && ground.food.exist && x == ground.food.x && y == ground.food.y) {
+		private void eat() {
+			if (live && ground.food.exist && x == ground.food.x && y == ground.food.y) {//当蛇头与食物重合，判定为吃到食物
 				ground.food.exist = false;//此食物设为不存在
-				ground.score += 1;//得分加一
 				
-				if (bodies.size() == 0) //如果没有身体就添加一个初始坐标为头部旧坐标的身体对象
-					bodies.add(new Body(bodyIndex++, head_old_x, head_old_y));
-				 else //如果已有身体就添加一个初始坐标为前一节身体旧坐标的对象（这里好像看不出来，具体见各节身体的移动方式设置）
-					bodies.add(new Body(bodyIndex++, bodies));
-				
+				getScore();
+				grow();		
 			}
+			else if (ground.food.time<0) {//此食物消失则扣分
+				ground.score -= 5;
+				if(ground.score<0)//扣到0为止
+					ground.score =0;
+			}
+		}
+		
+		private void getScore() {
+			if(ground.food.status==1)//根据食物状态得分或扣分
+				ground.score += 5;
+			else if(ground.food.status==2)
+				ground.score += 3;
+			else {
+				ground.score -=3;
+				if(ground.score<0)//扣到0为止
+					ground.score =0;	
+			}
+		}
+		
+		private void grow() {
+			if (bodies.size() == 0) //如果没有身体就添加一个初始坐标为头部旧坐标的身体对象
+				bodies.add(new Body(bodyIndex++, head_old_x, head_old_y));
+			else //如果已有身体就添加一个初始坐标为前一节身体旧坐标的对象（这里好像看不出来，具体见各节身体的移动方式设置）
+				bodies.add(new Body(bodyIndex++, bodies));
 		}
 
 		private void checkLive() {// 检查是否活着，蛇咬到自己后死亡：
