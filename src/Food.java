@@ -35,7 +35,7 @@ public class Food {
 		if (time <= 0)//时间到了则食物消失
 			exist = false;
 		Color c = g.getColor();
-		g.setColor(Color.blue);
+		g.setColor(Color.red);
 		g.fillRect(x, y, UNIT_SIZE, UNIT_SIZE);
 		g.setColor(c);
 		time--;// 每重画一次，食物的存在时间减少

@@ -92,7 +92,7 @@ public class Snake {
 	class Head {
 		public void draw(Graphics g) {//画头
 			Color color = g.getColor();
-			g.setColor(Color.RED);
+			g.setColor(Color.orange);
 			g.fillRect(x, y, UNIT_SIZE, UNIT_SIZE);
 			g.setColor(color);
 			move(dir);
@@ -105,23 +105,23 @@ public class Snake {
 			switch (dir) {
 			case U:
 				y -= UNIT_SIZE;
-				if(y<=0)
+				if(y<25)
 					y = ground.GAME_HEIGHT-UNIT_SIZE;
 				break;
 			case R:
 				x += UNIT_SIZE;
-				if(x>ground.GAME_WIDTH)
+				if(x>ground.GAME_WIDTH-UNIT_SIZE)
 					x=0;
 				break;
 			case D:
 				y += UNIT_SIZE;
-				if(y>ground.GAME_HEIGHT)
+				if(y>ground.GAME_HEIGHT-UNIT_SIZE)
 					y=25;
 				break;
 			case L:
 				x -= UNIT_SIZE;
 				if(x<0)
-					x=ground.GAME_WIDTH;
+					x=ground.GAME_WIDTH-UNIT_SIZE;
 				break;
 			}
 			checkLive();
@@ -172,7 +172,7 @@ public class Snake {
 
 		public void draw(Graphics g) {
 			Color color = g.getColor();
-			g.setColor(Color.ORANGE);
+			g.setColor(Color.yellow);
 			g.fillRect(x, y, UNIT_SIZE, UNIT_SIZE);
 			g.setColor(color);
 
